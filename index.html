@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tape Club</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style type="text/tailwindcss">
+        @layer base {
+            html {
+                font-size: 18px;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+                background-color: #231D16;
+            }
+            img {
+                max-width: 100%;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="flex flex-col bg-[url(images/BackgroundTexture.png)] min-h-screen">
+
+        <!-- Hero top sticker section -->
+        <div class="flex flex-row justify-between mt-8 mx-8">
+            <div class="w-16 md:w-32">
+                <img src="images/TapeClubTextLogo.png" alt="Tape Club Logo" />
+            </div>
+
+            <div class="flex flex-row gap-4 md:gap-12">
+                <img src="images/TCPinkYellowSticker.png" alt="Sticker" class="tc-sticker h-[35px] hidden md:block" />
+                <img src="images/TCBlueYellowSticker.png" alt="Sticker" class="tc-sticker h-[20px] md:h-[35px]" />
+                <img src="images/TCYellowOrangeSticker.png" alt="Sticker" class="tc-sticker h-[20px] md:h-[35px]" />
+                <img src="images/TCOrangeYellowSticker.png" alt="Sticker" class="tc-sticker h-[20px] md:h-[35px]" />
+                <img src="images/TCYellowBlueSticker.png" alt="Sticker" class="tc-sticker h-[35px] hidden md:block" />
+                <img src="images/TCGreenYellowSticker.png" alt="Sticker" class="tc-sticker h-[35px] hidden md:block" />
+                <img src="images/TCYellowPinkSticker.png" alt="Sticker" class="tc-sticker h-[35px] hidden md:block" />
+            </div>
+
+            <div class="w-12 md:w-24 mt-[-10px]">
+                <img src="images/TCRoundSticker.png" alt="Tape Club Round Sticker" />
+            </div>
+        </div>
+
+        <!-- Middle section -->
+        <div class="flex flex-row justify-between items-end mt-4 md:mt-0">
+
+            <!-- Sale sticker (desktop only) -->
+            <div class="hidden md:block justify-items-start md:ml-4 md:mb-4">
+                <img src="images/SaleSticker.png" alt="Sale Sticker" class="scale-75 -rotate-5" />
+            </div>
+
+            <!-- Center column -->
+            <div class="w-xs mx-auto md:w-xl">
+                <img src="images/HeroText.png" alt="A Piece of Someone's Life." class="mb-6 md:mb-4" />
+                <img src="images/CassetteTape.png" alt="Cassette Tape" class="mb-6 md:mb-2" />
+
+                <!-- Mobile: static stack -->
+                <div class="md:hidden flex flex-col">
+                    <img src="images/HeroDescription.png" alt="Description" class="mb-4" />
+                    <img src="images/descriptiontext2.png" alt="Description 2" class="mb-4" />
+                    <img src="images/descriptiontext3.png" alt="Description 3" class="mb-4" />
+                    <img src="images/descriptiontext4.png" alt="Description 4" class="mb-4" />
+                </div>
+
+                <!-- Desktop: animated slider -->
+                <div id="slider-container" class="hidden md:block relative overflow-hidden">
+                    <img id="slide-0" src="images/HeroDescription.png" alt="Description" class="scale-75" />
+                    <img id="slide-1" src="images/descriptiontext2.png" alt="Description 2" class="scale-75 absolute top-0 left-0 w-full" />
+                    <img id="slide-2" src="images/descriptiontext3.png" alt="Description 3" class="scale-75 absolute top-0 left-0 w-full" />
+                    <img id="slide-3" src="images/descriptiontext4.png" alt="Description 4" class="scale-75 absolute top-0 left-0 w-full" />
+                </div>
+
+                <!-- Down arrow (desktop only) -->
+                <img
+                    id="down-arrow"
+                    src="images/DownArrow.png"
+                    alt="Next"
+                    class="hidden md:block mx-auto md:scale-75 mb-4 cursor-pointer"
+                />
+
+                <!-- Sale sticker (mobile only) -->
+                <img src="images/SaleSticker.png" alt="Sale Sticker" class="md:hidden mx-auto scale-75 -rotate-5 mb-4" />
+
+                <p class="text-white font-bold text-center text-[10px] md:text-xs mb-4 [text-shadow:0px_-6px_4px_rgba(28,57,146,0.25),0px_6px_4px_rgba(199,77,77,0.25),0px_0px_100px_rgba(255,255,255,0.5)] md:blur-[0.5px]">
+                    This is invite only. Inquiries and press, email <a href="mailto:hello@tapeclubatx.com">hello@tapeclubatx.com</a>
+                </p>
+            </div>
+
+            <!-- Right logo (desktop only) -->
+            <div class="hidden md:block w-32 mb-4 md:mb-8 mr-4 md:mr-8">
+                <img src="images/TapeClubTextLogo.png" alt="Tape Club Logo" />
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const STICKER_ROTATIONS = [-12, 18, -30, -4, 61, -12, -6];
+
+        // Sticker snap animations
+        document.querySelectorAll('.tc-sticker').forEach((el, i) => {
+            const base = STICKER_ROTATIONS[i];
+            gsap.set(el, { rotation: base });
+            gsap.to(el, {
+                rotation: base + 15,
+                duration: 0.08,
+                ease: 'none',
+                yoyo: true,
+                repeat: -1,
+                repeatDelay: 0.3,
+            });
+        });
+
+        // Slider
+        const slideEls = [0, 1, 2, 3].map(i => document.getElementById('slide-' + i));
+        const container = document.getElementById('slider-container');
+        let currentSlide = 0;
+
+        slideEls.forEach((el, i) => {
+            if (i !== 0) gsap.set(el, { yPercent: -150, autoAlpha: 0 });
+        });
+
+        document.getElementById('down-arrow').addEventListener('click', () => {
+            const next = (currentSlide + 1) % slideEls.length;
+            const nextEl = slideEls[next];
+            gsap.set(nextEl, { yPercent: -150, autoAlpha: 1 });
+            gsap.to(container, { height: nextEl.offsetHeight, duration: 0.5, ease: 'power2.inOut' });
+            gsap.to(slideEls[currentSlide], { yPercent: 150, autoAlpha: 0, duration: 0.5, ease: 'power2.inOut' });
+            gsap.to(nextEl, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power2.inOut', delay: 0.1 });
+            currentSlide = next;
+        });
+    </script>
+</body>
+</html>
